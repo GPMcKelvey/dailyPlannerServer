@@ -14,7 +14,8 @@ const Todos = db.define("todos", {
   },
   complete: {
     type: DataTypes.BOOLEAN,
-    allowNull: true,
+    defaultValue: false,
+    allowNull: false,
   }
 });
 
