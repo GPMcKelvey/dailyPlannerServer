@@ -20,7 +20,8 @@ const Users = db.define("users", {
   },
   admin: {
       type: DataTypes.BOOLEAN,
-      allowNull: true,
+      defaultValue: false,
+      allowNull: false,
   }
 });
 
