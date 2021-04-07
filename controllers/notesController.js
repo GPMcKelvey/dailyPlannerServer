@@ -44,10 +44,10 @@ router.get('/', validateJWT, async (req, res) => {
             }
         })
         .then(
-            task => {
+            note => {
                 res.status(200).json({
                     message: 'personal notes retrieved',
-                    task: task
+                    note: note
                 })
             }
         )
