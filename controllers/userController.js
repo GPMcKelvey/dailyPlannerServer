@@ -40,45 +40,47 @@ router.post('/signup', async (req, res) => {
 
 //login
 router.post('/login', async(req, res) => {
-
     const {username, password} = req.body.user;
-
-    try {
-       await models.UsersModel.findOne({
-           where: {
+    try{
+       let loginUser = await models.UsersModel.findOne({
+           where:{
                username: username
            }
-       })
-       .then(
-           user => {
-            if (user) {
-                bcrypt.compare(password, user.password, (err, matches) => {
-                if(matches) {
-                    let sessionToken = jwt.sign(
-                        {id: user.id},
-                        process.env.JWT_SECRET,
-                        {expiresIn:60*60*24})
-                    res.status(200).json({
-                        user: user,
-                        message: "Successfully logged in!",
-                        sessionToken: `Bearer ${sessionToken}`
-                    })
-                } else {
-                    res.status(401).json({
-                        message: "Incorrect email or password"
-                    })
-                }
-            })
-        }
-    }
-)
-    } catch (err) {
-        //console.log(err);
+       });
+       if(loginUser) {
+           let passwordComparison = await bcrypt.compare(password,loginUser.password);
+           if(passwordComparison){
+               let token = jwt.sign(
+                   {
+                       id: loginUser.id
+                   },
+                   process.env.JWT_SECRET,
+                   {
+                       expiresIn:60*60*24
+                   }
+               );
+               res.status(200).json({
+                   user: loginUser,
+                   message: "User successfully logged in!",
+                   sessionToken: `Bearer ${token}`
+               });
+           } else {
+               res.status(401).json({
+                   message: "Incorrect email or password"
+               });
+           }
+       } else {
+           res.status(401).json({
+               message:"Incorrect email or password"
+           })
+       }
+    } catch(err) {
+        console.log(err);
         res.status(500).json({
             message:"Error logging in!"
         });
-    };
-});
+    }
+    });
 
 // admin view all users
 router.get('/userinfo', validateJWT, async (req, res) => {
