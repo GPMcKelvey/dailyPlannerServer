@@ -20,7 +20,7 @@ router.post('/signup', async (req, res) => {
                 let token = jwt.sign({id: user.id}, process.env.JWT_SECRET, {expiresIn: 60*60*24});
                 res.status(201).json({
                     user: user,
-                    message: 'user created',
+                    message: 'User created!',
                     sessionToken: `Bearer ${token}`
                 });
             }
@@ -66,12 +66,12 @@ router.post('/login', async(req, res) => {
                });
            } else {
                res.status(401).json({
-                   message: "Incorrect email or password"
+                   message: "Incorrect username or password"
                });
            }
        } else {
            res.status(401).json({
-               message:"Incorrect email or password"
+               message:"Incorrect username or password"
            })
        }
     } catch(err) {
