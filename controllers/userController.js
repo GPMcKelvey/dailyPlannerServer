@@ -118,7 +118,11 @@ router.delete('/delete/:id', validateJWT, async (req, res) => {
         await models.UsersModel.destroy({
             where: {
                 id: userId
-            }
+            },
+            // include: {all: true}
+        //     include: [
+        //         {model: models.EventsModel},
+        // ]
         })
         .then(
             user => {
